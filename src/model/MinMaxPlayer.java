@@ -41,7 +41,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-		Move bestMove=minimax(game,2,player,null);
+		Move bestMove=minimax2(game,5,player,null);
 		game.move(bestMove.getStartIndex(),bestMove.getEndIndex());
 
 //		Game copy = game.copy();
@@ -67,6 +67,27 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 	}
 
+	private Move minimax2(Game game,int depth,boolean aiPlayer,Move mv)
+	{
+		if (depth==0 ||  game.isGameOver()) {
+			return mv;
+		}
+
+		Game copy = game.copy();
+
+
+		if (aiPlayer)
+		{
+			return maxValue(copy,depth,mv);
+		}
+		else
+		{
+			return minValue(copy,depth,mv);
+		}
+
+
+
+	}
 	private Move minimax(Game game,int depth,boolean aiPlayer,Move mv)
 	{
 		if (depth==0 ||  game.isGameOver()) {
@@ -116,8 +137,11 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 	}
 
+
+
 	private Move maxValue(Game game,int depth,Move m)
 	{
+		System.out.println(" Max :"+transpositionTableMax.getValue(game));
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
 			return m;
@@ -125,12 +149,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 		List<Move> moves = getMoves(game);
 		double bestScore=Double.NEGATIVE_INFINITY;
-		Move bestMove=null;
-		Move resMove=null;
-
+		Move bestMove=moves.get(0);
+		Move resMove;
+		Game tempCopy=game;
 		for (Move move:moves)
 		{
-			Game tempCopy=game.copy();
+			tempCopy=tempCopy.copy();
 			tempCopy.move(move.getStartIndex(),move.getEndIndex());
 			if (tempCopy.isP2Turn())
 			{
@@ -150,12 +174,14 @@ public class MinMaxPlayer extends ComputerPlayer {
 		}
 
 
-
+		transpositionTableMax.add(game,game.goodHeuristic(true));
 		return bestMove;
 	}
 
 	private Move minValue(Game game,int depth,Move m)
 	{
+		System.out.println(" Min :"+transpositionTableMin.getValue(game));
+
 		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!=null)
 		{
 			return m;
@@ -163,12 +189,13 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 		List<Move> moves = getMoves(game);
 		double bestScore=Double.POSITIVE_INFINITY;
-		Move bestMove=null;
+		Move bestMove=moves.get(0);
 		Move resMove;
+		Game tempCopy=game;
 
 		for (Move move:moves)
 		{
-			Game tempCopy=game.copy();
+			tempCopy=tempCopy.copy();
 			tempCopy.move(move.getStartIndex(),move.getEndIndex());
 			if (tempCopy.isP2Turn())
 			{
@@ -187,6 +214,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 			}
 		}
 
+		transpositionTableMin.add(game,game.goodHeuristic(false));
 		return bestMove;
 	}
 
