@@ -41,7 +41,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-		Move bestMove=minimax2(game,5,player,null);
+		Move bestMove=minimax2(game,6,player,null);
 		game.move(bestMove.getStartIndex(),bestMove.getEndIndex());
 
 //		Game copy = game.copy();
@@ -174,7 +174,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 		}
 
 
-		transpositionTableMax.add(game,game.goodHeuristic(true));
+//		transpositionTableMax.add(game,game.goodHeuristic(true));
 		return bestMove;
 	}
 
@@ -182,7 +182,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 	{
 		System.out.println(" Min :"+transpositionTableMin.getValue(game));
 
-		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!=null)
+		if (game.isGameOver() || depth==0 )
 		{
 			return m;
 		}
@@ -214,7 +214,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 			}
 		}
 
-		transpositionTableMin.add(game,game.goodHeuristic(false));
+//		transpositionTableMin.add(game,game.goodHeuristic(false));
 		return bestMove;
 	}
 
