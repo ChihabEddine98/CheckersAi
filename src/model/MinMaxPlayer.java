@@ -116,52 +116,78 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 	}
 
-	private double maxValue(Game game,Move m)
+	private Move maxValue(Game game,int depth,Move m)
 	{
-		if (game.isGameOver())
+		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
-			transpositionTableMax.add(game, (int) m.getWeight());
-			return m.getWeight();
+			return m;
 		}
 
-		if (transpositionTableMax.getValue(game)!=null)
-		{
-			return transpositionTableMax.getValue(game);
-		}
-
-		double v=m.WEIGHT_INVALID;
 		List<Move> moves = getMoves(game);
+		double bestScore=Double.NEGATIVE_INFINITY;
+		Move bestMove=null;
+		Move resMove=null;
 
 		for (Move move:moves)
 		{
-			v=Math.max(v,minValue(game,move));
+			Game tempCopy=game.copy();
+			tempCopy.move(move.getStartIndex(),move.getEndIndex());
+			if (tempCopy.isP2Turn())
+			{
+				resMove=maxValue(tempCopy,depth-1,move);
+			}
+			else
+			{
+				resMove=minValue(tempCopy,depth-1,move);
+			}
+
+			double score=resMove.getWeight();
+			if (score > bestScore)
+			{
+				bestScore=score;
+				bestMove=move;
+			}
 		}
 
-		return v;
+
+
+		return bestMove;
 	}
 
-	private double minValue(Game game,Move m)
+	private Move minValue(Game game,int depth,Move m)
 	{
-		if (game.isGameOver())
+		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!=null)
 		{
-			transpositionTableMin.add(game, (int) m.getWeight());
-			return m.getWeight();
+			return m;
 		}
 
-		if (transpositionTableMin.getValue(game)!=null)
-		{
-			return transpositionTableMin.getValue(game);
-		}
-
-		double v=Double.POSITIVE_INFINITY;
 		List<Move> moves = getMoves(game);
+		double bestScore=Double.POSITIVE_INFINITY;
+		Move bestMove=null;
+		Move resMove;
 
 		for (Move move:moves)
 		{
-			v=Math.min(v,maxValue(game,move));
+			Game tempCopy=game.copy();
+			tempCopy.move(move.getStartIndex(),move.getEndIndex());
+			if (tempCopy.isP2Turn())
+			{
+				resMove=maxValue(tempCopy,depth-1,move);
+			}
+			else
+			{
+				resMove=minValue(tempCopy,depth-1,move);
+			}
+
+			double score=resMove.getWeight();
+			if (score < bestScore)
+			{
+				bestScore=score;
+				bestMove=move;
+			}
 		}
 
-		return v;
+		return bestMove;
 	}
 
 
