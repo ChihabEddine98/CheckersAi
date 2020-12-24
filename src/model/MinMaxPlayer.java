@@ -178,6 +178,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 		return bestMove;
 	}
 
+	// TODO : return double ( or int utility ) instead of move
 	private Move minValue(Game game,int depth,Move m)
 	{
 		System.out.println(" Min :"+transpositionTableMin.getValue(game));
