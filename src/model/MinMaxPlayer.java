@@ -139,6 +139,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 
 	// TODO : return double ( or int utility ) instead of move
+	// TODO : Memoize already calculated values !
 	private Move maxValue(Game game,int depth,Move m)
 	{
 		System.out.println(" Max :"+transpositionTableMax.getValue(game));
