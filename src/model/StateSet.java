@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class StateSet {
 	HashMap<String,Integer> set;
-	
 	public StateSet() {
 		this.set = new HashMap<String,Integer>();
 	}
