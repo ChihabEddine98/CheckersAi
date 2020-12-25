@@ -20,7 +20,7 @@ import src.logic.MoveGenerator;
 public class MinMaxPlayer extends ComputerPlayer {
 
 	protected boolean player;
-	private Move best_move=null;
+
 	
 	protected StateSet transpositionTableMax, transpositionTableMin;
 	
@@ -42,8 +42,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-		System.out.println(" Before :"+best_move);
-		minimax(game,3);
+		Move best_move=minimax(game,6);
 		System.out.println(" After :"+best_move);
 
 		game.move(best_move.getStartIndex(),best_move.getEndIndex());
@@ -52,19 +51,33 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 	}
 
-	private int minimax(Game game,int depth)
+	private Move minimax(Game game,int depth)
 	{
-		Game copy = game.copy();
+		Game temp_game = game.copy();
+		List<Move> moves=getMoves(temp_game);
+		int best_score;
+		int high_score=Integer.MIN_VALUE;
+		int low_score=Integer.MAX_VALUE;
+		Move best_move=null;
 
-		if (player)
+		transpositionTableMax = new StateSet();
+		transpositionTableMin = new StateSet();
+
+		for (Move move : moves)
 		{
-			return maxValue(copy,depth);
-		}
-		else
-		{
-			return minValue(copy,depth);
+			best_score = player ? maxValue(temp_game,depth) : minValue(temp_game,depth);
+			if (player && best_score >= high_score){
+				high_score=best_score;
+				best_move=move;
+			}
+			else if (!player && best_score <= low_score)
+			{
+				low_score=best_score;
+				best_move=move;
+			}
 		}
 
+		return best_move;
 	}
 
 
@@ -75,7 +88,10 @@ public class MinMaxPlayer extends ComputerPlayer {
 //		System.out.println(" Max :"+transpositionTableMax.getValue(game));
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
-			System.out.println(" Max :"+game.goodHeuristic(true));
+			if (transpositionTableMax.getValue(game)!= null){
+				System.out.println(" Max :"+transpositionTableMax.getValue(game));
+				return transpositionTableMax.getValue(game);
+			}
 			return game.goodHeuristic(true);
 		}
 		// Make Backup for Game instance
@@ -90,24 +106,14 @@ public class MinMaxPlayer extends ComputerPlayer {
 			temp_game=temp_game.copy();
 			temp_game.move(move.getStartIndex(),move.getEndIndex());
 
-			if (temp_game.isP2Turn()==player)
-			{
-				res_score=maxValue(temp_game,depth-1);
-			}
-			else
-			{
-				res_score=minValue(temp_game,depth-1);
-			}
+			res_score= temp_game.isP2Turn()==player ? maxValue(temp_game,depth-1) :
+					   minValue(temp_game,depth-1);
 
-			if (res_score > best_score)
-			{
-				best_score=res_score;
-				best_move=move;
-			}
+			best_score=Math.max(best_score,res_score);
+
 		}
 
-
-//		transpositionTableMax.add(game,game.goodHeuristic(true));
+		transpositionTableMax.add(temp_game,best_score);
 		return best_score;
 	}
 
@@ -116,10 +122,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 	{
 
 
-		if (game.isGameOver() || depth==0 )
+		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!= null)
 		{
-			System.out.println(" Min-depth :"+depth);
-			System.out.println(" Min :"+game.goodHeuristic(false));
+			if (transpositionTableMin.getValue(game)!= null){
+				System.out.println(" Min :"+transpositionTableMin.getValue(game));
+				return transpositionTableMin.getValue(game);
+			}
 			return game.goodHeuristic(false);
 		}
 		// Make Backup to the game
@@ -134,24 +142,14 @@ public class MinMaxPlayer extends ComputerPlayer {
 		{
 			temp_game=temp_game.copy();
 			temp_game.move(move.getStartIndex(),move.getEndIndex());
+			res_score= temp_game.isP2Turn()== player ? maxValue(temp_game,depth-1) :
+					minValue(temp_game,depth-1);
 
-			if (temp_game.isP2Turn()==player)
-			{
-				res_score=maxValue(temp_game,depth-1);
-			}
-			else
-			{
-				res_score=minValue(temp_game,depth-1);
-			}
+			best_score=Math.min(best_score,res_score);
 
-			if (res_score < best_score)
-			{
-				best_score=res_score;
-				best_move=move;
-			}
 		}
 
-//		transpositionTableMin.add(game,game.goodHeuristic(false));
+		transpositionTableMin.add(temp_game,best_score);
 		return best_score;
 	}
 
