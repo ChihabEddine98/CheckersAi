@@ -20,6 +20,7 @@ import src.logic.MoveGenerator;
 public class MinMaxPlayer extends ComputerPlayer {
 
 	protected boolean player;
+	private Move best_move=null;
 	
 	protected StateSet transpositionTableMax, transpositionTableMin;
 	
@@ -41,183 +42,117 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-		Move bestMove=minimax2(game,6,player,null);
-		game.move(bestMove.getStartIndex(),bestMove.getEndIndex());
+		System.out.println(" Before :"+best_move);
+		minimax(game,3);
+		System.out.println(" After :"+best_move);
 
-//		Game copy = game.copy();
-//		List<Move> moves = getMoves(copy);
-//
-//		double bestWeight = Move.WEIGHT_INVALID;
-//		Move bestMove=null;
-//
-//		if (player)
-//		{
-//			for (Move m:moves)
-//			{
-//				System.out.println(m.getWeight());
-//				double minVal=minValue(copy.copy(),m);
-//				if (m.getWeight() > minVal)
-//				{
-//					bestMove=m;
-//				}
-//			}
-//
-//			game.move(bestMove.getStartIndex(),bestMove.getEndIndex());
-//		}
-
-	}
-
-	private Move minimax2(Game game,int depth,boolean aiPlayer,Move mv)
-	{
-		if (depth==0 ||  game.isGameOver()) {
-			return mv;
-		}
-
-		Game copy = game.copy();
-
-
-		if (aiPlayer)
-		{
-			return maxValue(copy,depth,mv);
-		}
-		else
-		{
-			return minValue(copy,depth,mv);
-		}
+		game.move(best_move.getStartIndex(),best_move.getEndIndex());
 
 
 
 	}
-	private Move minimax(Game game,int depth,boolean aiPlayer,Move mv)
+
+	private int minimax(Game game,int depth)
 	{
-		if (depth==0 ||  game.isGameOver()) {
-			return mv;
-		}
-
 		Game copy = game.copy();
-		List<Move> moves = getMoves(copy);
-		double bestScore;
-		Move bestMove=null;
 
-		if (aiPlayer)
+		if (player)
 		{
-			bestScore=Double.NEGATIVE_INFINITY;
-			for (Move move:moves)
-			{
-				Game tempCopy=copy.copy();
-				tempCopy.move(move.getStartIndex(),move.getEndIndex());
-				Move resMove=minimax(tempCopy,depth-1,tempCopy.isP2Turn(),move);
-				double score=resMove.getWeight();
-				if (score > bestScore)
-				{
-					bestScore=score;
-					bestMove=move;
-				}
-			}
+			return maxValue(copy,depth);
 		}
 		else
 		{
-			bestScore=Double.POSITIVE_INFINITY;
-			for (Move move:moves)
-			{
-				Game tempCopy=copy.copy();
-				tempCopy.move(move.getStartIndex(),move.getEndIndex());
-				Move resMove=minimax(tempCopy,depth-1,!tempCopy.isP2Turn(),move);
-				double score=resMove.getWeight();
-				if (score < bestScore)
-				{
-					bestScore=score;
-					bestMove=move;
-				}
-			}
+			return minValue(copy,depth);
 		}
-
-		return bestMove;
-
 
 	}
 
 
 	// TODO : return double ( or int utility ) instead of move
 	// TODO : Memoize already calculated values !
-	private Move maxValue(Game game,int depth,Move m)
+	private int maxValue(Game game,int depth)
 	{
-		System.out.println(" Max :"+transpositionTableMax.getValue(game));
+//		System.out.println(" Max :"+transpositionTableMax.getValue(game));
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
-			return m;
+			System.out.println(" Max :"+game.goodHeuristic(true));
+			return game.goodHeuristic(true);
 		}
+		// Make Backup for Game instance
+		Game temp_game=game;
 
-		List<Move> moves = getMoves(game);
-		double bestScore=Double.NEGATIVE_INFINITY;
-		Move bestMove=moves.get(0);
-		Move resMove;
-		Game tempCopy=game;
+		List<Move> moves = getMoves(temp_game);
+		int best_score=Integer.MIN_VALUE;
+		int res_score;
+
 		for (Move move:moves)
 		{
-			tempCopy=tempCopy.copy();
-			tempCopy.move(move.getStartIndex(),move.getEndIndex());
-			if (tempCopy.isP2Turn())
+			temp_game=temp_game.copy();
+			temp_game.move(move.getStartIndex(),move.getEndIndex());
+
+			if (temp_game.isP2Turn()==player)
 			{
-				resMove=maxValue(tempCopy,depth-1,move);
+				res_score=maxValue(temp_game,depth-1);
 			}
 			else
 			{
-				resMove=minValue(tempCopy,depth-1,move);
+				res_score=minValue(temp_game,depth-1);
 			}
 
-			double score=resMove.getWeight();
-			if (score > bestScore)
+			if (res_score > best_score)
 			{
-				bestScore=score;
-				bestMove=move;
+				best_score=res_score;
+				best_move=move;
 			}
 		}
 
 
 //		transpositionTableMax.add(game,game.goodHeuristic(true));
-		return bestMove;
+		return best_score;
 	}
 
 	// TODO : return double ( or int utility ) instead of move
-	private Move minValue(Game game,int depth,Move m)
+	private int minValue(Game game,int depth)
 	{
-		System.out.println(" Min :"+transpositionTableMin.getValue(game));
+
 
 		if (game.isGameOver() || depth==0 )
 		{
-			return m;
+			System.out.println(" Min-depth :"+depth);
+			System.out.println(" Min :"+game.goodHeuristic(false));
+			return game.goodHeuristic(false);
 		}
+		// Make Backup to the game
+		Game temp_game=game;
 
-		List<Move> moves = getMoves(game);
-		double bestScore=Double.POSITIVE_INFINITY;
-		Move bestMove=moves.get(0);
-		Move resMove;
-		Game tempCopy=game;
+		List<Move> moves = getMoves(temp_game);
+		int best_score=Integer.MAX_VALUE;
+		int res_score;
+
 
 		for (Move move:moves)
 		{
-			tempCopy=tempCopy.copy();
-			tempCopy.move(move.getStartIndex(),move.getEndIndex());
-			if (tempCopy.isP2Turn())
+			temp_game=temp_game.copy();
+			temp_game.move(move.getStartIndex(),move.getEndIndex());
+
+			if (temp_game.isP2Turn()==player)
 			{
-				resMove=maxValue(tempCopy,depth-1,move);
+				res_score=maxValue(temp_game,depth-1);
 			}
 			else
 			{
-				resMove=minValue(tempCopy,depth-1,move);
+				res_score=minValue(temp_game,depth-1);
 			}
 
-			double score=resMove.getWeight();
-			if (score < bestScore)
+			if (res_score < best_score)
 			{
-				bestScore=score;
-				bestMove=move;
+				best_score=res_score;
+				best_move=move;
 			}
 		}
 
 //		transpositionTableMin.add(game,game.goodHeuristic(false));
-		return bestMove;
+		return best_score;
 	}
 
 
