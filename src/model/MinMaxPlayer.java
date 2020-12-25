@@ -60,8 +60,6 @@ public class MinMaxPlayer extends ComputerPlayer {
 		int low_score=Integer.MAX_VALUE;
 		Move best_move=null;
 
-		transpositionTableMax = new StateSet();
-		transpositionTableMin = new StateSet();
 
 		for (Move move : moves)
 		{
@@ -76,7 +74,8 @@ public class MinMaxPlayer extends ComputerPlayer {
 				best_move=move;
 			}
 		}
-
+		System.out.println(" transpo Max :"+transpositionTableMax.size());
+		System.out.println(" transpo Min :"+transpositionTableMin.size());
 		return best_move;
 	}
 
@@ -105,6 +104,8 @@ public class MinMaxPlayer extends ComputerPlayer {
 		{
 			temp_game=temp_game.copy();
 			temp_game.move(move.getStartIndex(),move.getEndIndex());
+			transpositionTableMax.add(temp_game,best_score);
+
 
 			res_score= temp_game.isP2Turn()==player ? maxValue(temp_game,depth-1) :
 					   minValue(temp_game,depth-1);
@@ -113,7 +114,6 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 		}
 
-		transpositionTableMax.add(temp_game,best_score);
 		return best_score;
 	}
 
@@ -142,6 +142,8 @@ public class MinMaxPlayer extends ComputerPlayer {
 		{
 			temp_game=temp_game.copy();
 			temp_game.move(move.getStartIndex(),move.getEndIndex());
+			transpositionTableMin.add(temp_game,best_score);
+
 			res_score= temp_game.isP2Turn()== player ? maxValue(temp_game,depth-1) :
 					minValue(temp_game,depth-1);
 
@@ -149,7 +151,6 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 		}
 
-		transpositionTableMin.add(temp_game,best_score);
 		return best_score;
 	}
 
