@@ -42,15 +42,8 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-
-
 		Move best_move=minimax(game,6);
-
-
-		game.move(best_move.getStartIndex(),best_move.getEndIndex());
-
-
-
+		game.move(best_move);
 	}
 
 	private Move minimax(Game game,int depth)
@@ -79,17 +72,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 				best_move=move;
 			}
 		}
-		System.out.println(" transpo Max :"+transpositionTableMax.size());
-		System.out.println(" transpo Min :"+transpositionTableMin.size());
 		return best_move;
 	}
 
 
-	// TODO : return double ( or int utility ) instead of move
-	// TODO : Memoize already calculated values !
 	private int maxValue(Game game,int depth)
 	{
-//		System.out.println(" Max :"+transpositionTableMax.getValue(game));
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
 			if (transpositionTableMax.getValue(game)!= null){
@@ -108,27 +96,22 @@ public class MinMaxPlayer extends ComputerPlayer {
 		for (Move move:moves)
 		{
 			temp_game=temp_game.copy();
-			temp_game.move(move.getStartIndex(),move.getEndIndex());
-
-
+			temp_game.move(move);
 
 			res_score= temp_game.isP2Turn()==player ? maxValue(temp_game,depth-1) :
 					   minValue(temp_game,depth-1);
 
 			best_score=Math.max(best_score,res_score);
 		}
+
 		transpositionTableMax=new StateSet();
 		transpositionTableMax.add(temp_game,best_score);
-
 
 		return best_score;
 	}
 
-	// TODO : return double ( or int utility ) instead of move
 	private int minValue(Game game,int depth)
 	{
-
-
 		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!= null)
 		{
 			if (transpositionTableMin.getValue(game)!= null){
@@ -148,14 +131,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 		for (Move move:moves)
 		{
 			temp_game=temp_game.copy();
-			temp_game.move(move.getStartIndex(),move.getEndIndex());
+			temp_game.move(move);
 
 			res_score= temp_game.isP2Turn()== player ? maxValue(temp_game,depth-1) :
 					minValue(temp_game,depth-1);
 
 			best_score=Math.min(best_score,res_score);
-
-
 		}
 
 		transpositionTableMin=new StateSet();

@@ -91,7 +91,13 @@ public class Game {
 		}
 		return move(Board.toIndex(start), Board.toIndex(end));
 	}
-	
+
+
+
+	public boolean move(Move move) {
+		return move(move.getStartIndex(), move.getEndIndex());
+	}
+
 	/**
 	 * Attempts to make a move given the start and end index of the move.
 	 * 
