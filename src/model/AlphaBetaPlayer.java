@@ -32,7 +32,7 @@ public class AlphaBetaPlayer extends MinMaxPlayer {
 			return;
 		}
 			
-		Move best_move=minimax_alpha_beta(game,6);
+		Move best_move=minimax_alpha_beta(game,20);
 		game.move(best_move);
 	}
 	private Move minimax_alpha_beta(Game game,int depth)
