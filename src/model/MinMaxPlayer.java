@@ -23,7 +23,7 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 	
 	protected StateSet transpositionTableMax, transpositionTableMin;
-	
+
 	public MinMaxPlayer(boolean joueur) {
 		this.player = joueur;
 		this.transpositionTableMax = new StateSet();
@@ -48,7 +48,19 @@ public class MinMaxPlayer extends ComputerPlayer {
 			return;
 		}
 
-		Move best_move=minimax(game,6);
+		int depth ;
+		switch (level) {
+			case 0:
+				depth = 3; break;
+			case 1:
+				depth = 6; break;
+			case 2:
+				depth = 9; break;
+			default:
+				depth = 5; break;
+		}
+		System.out.println("depth "+depth);
+		Move best_move=minimax(game,depth);
 		game.move(best_move);
 	}
 

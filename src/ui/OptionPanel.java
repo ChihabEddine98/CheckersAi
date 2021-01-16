@@ -52,6 +52,7 @@ public class OptionPanel extends JPanel {
 	private JButton player2Btn;
 	/** The button to perform an action based on the type of player. */
 	private JButton gameDifBtn;
+	static int level = -1 ;
 	
 	/**
 	 * Creates a new option panel for the specified checkers window.
@@ -115,15 +116,16 @@ public class OptionPanel extends JPanel {
 	}
 	
 	
+
 	/**
-	 * Gets a new instance of the type of player selected for the specified
-	 * combo box.
-	 * 
-	 * @param playerOpts	the combo box with the player options.
-	 * @return a new instance of a {@link model.Player} object that corresponds
-	 * with the type of player selected.
+	 *
+	 * @param playerOpts
+	 * @param level
+	 * @param player1
+	 * @return a new instance of a {Player} object that corresponds
+	 * 	 * with the type of player selected.
 	 */
-	private static Player getPlayer(JComboBox<String> playerOpts,JComboBox<String> levelOpts, boolean player1) {
+	private static Player getPlayer(JComboBox<String> playerOpts,int level, boolean player1) {
 		
 		Player player = new HumanPlayer();
 		if (playerOpts == null) {
@@ -135,20 +137,19 @@ public class OptionPanel extends JPanel {
 		if (type.equals("Computer")) {
 			player = new ComputerPlayer();
 		} else {
-			int level = (int) levelOpts.getSelectedItem();
 			if(type.equals("MinMaxComputer"))
 				if (level >= 0 )
 				{
 					player = new MinMaxPlayer(player1,level);
 				}
-				else player = new MinMaxPlayer(player1,level);
+				else player = new MinMaxPlayer(player1);
 			else {
 				if(type.equals("AlphaBetaComputer"))
 					if (level >= 0 )
 					{
-						player = new AlphaBetaPlayer(player1,level);
+						player = new AlphaBetaPlayer(player1);
 					}
-					else player = new AlphaBetaPlayer(player1,level);
+					else player = new AlphaBetaPlayer(player1);
 			}
 		}
 		
@@ -176,22 +177,25 @@ public class OptionPanel extends JPanel {
 			boolean isNetwork = false, isP1 = true;
 			if (src == restartBtn) {
 				window.restart();
+				System.out.println(gameDif.getSelectedIndex());
+				OptionPanel.level = gameDif.getSelectedIndex();
 			} else if (src == player1Opts) {
-				Player player = getPlayer(player1Opts,true);
+				Player player = getPlayer(player1Opts,OptionPanel.level,true);
 				window.setPlayer1(player);
 				isNetwork = (player instanceof NetworkPlayer);
 				btn = player1Btn;
 			} else if (src == player2Opts) {
-				Player player = getPlayer(player2Opts,false);
+				int level = gameDif.getSelectedIndex();
+				Player player = getPlayer(player2Opts,level,false);
 				window.setPlayer2(player);
 				isNetwork = (player instanceof NetworkPlayer);
 				btn = player2Btn;
 				isP1 = false;
 			}
 			else if (src == gameDif) {
-				int level = gameDif.getSelectedIndex();
-				System.out.println("Yooooooo ");
-				System.out.println(gameDif.getSelectedIndex());
+				OptionPanel.level = gameDif.getSelectedIndex();
+//				System.out.println("Yooooooo ");
+//				System.out.println(gameDif.getSelectedIndex());
 			}
 
 		}

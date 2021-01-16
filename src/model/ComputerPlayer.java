@@ -49,7 +49,7 @@ public class ComputerPlayer extends Player {
 	private static final double KING_FACTOR = 2;
 	/* ------------ */
 
-	protected int level = 0;
+	protected int level = -1;
 
 	@Override
 	public boolean isHuman() {
