@@ -45,9 +45,13 @@ public class OptionPanel extends JPanel {
 
 	/** The combo box that changes what type of player player 2 is. */
 	private JComboBox<String> player2Opts;
+	/** The combo box that changes what type of player player 2 is. */
+	private JComboBox<String> gameDif;
 	
 	/** The button to perform an action based on the type of player. */
 	private JButton player2Btn;
+	/** The button to perform an action based on the type of player. */
+	private JButton gameDifBtn;
 	
 	/**
 	 * Creates a new option panel for the specified checkers window.
@@ -62,12 +66,15 @@ public class OptionPanel extends JPanel {
 		// Initialize the components
 		OptionListener ol = new OptionListener();
 		final String[] playerTypeOpts = {"Human", "Computer", "MinMaxComputer", "AlphaBetaComputer"/*, "Network"*/};
+		final String[] gameDifTypeOpts = {"Easy", "Medium", "Hard"};
 		this.restartBtn = new JButton("Restart");
 		this.player1Opts = new JComboBox<>(playerTypeOpts);
 		this.player2Opts = new JComboBox<>(playerTypeOpts);
+		this.gameDif = new JComboBox<>(gameDifTypeOpts);
 		this.restartBtn.addActionListener(ol);
 		this.player1Opts.addActionListener(ol);
 		this.player2Opts.addActionListener(ol);
+		this.gameDif.addActionListener(ol);
 		JPanel top = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JPanel middle = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -77,6 +84,9 @@ public class OptionPanel extends JPanel {
 		this.player2Btn = new JButton("Set Connection");
 		this.player2Btn.addActionListener(ol);
 		this.player2Btn.setVisible(false);
+		this.gameDifBtn = new JButton("Set Connection");
+		this.gameDifBtn.addActionListener(ol);
+		this.gameDifBtn.setVisible(false);
 		
 		// Add components to the layout
 		top.add(restartBtn);
@@ -86,6 +96,11 @@ public class OptionPanel extends JPanel {
 		bottom.add(new JLabel("(black) Player 2: "));
 		bottom.add(player1Opts);
 		bottom.add(player1Btn);
+
+		middle.add(new JLabel("Difficulty Level :"));
+		middle.add(gameDif);
+		middle.add(gameDifBtn);
+
 		this.add(top);
 		this.add(middle);
 		this.add(bottom);
@@ -108,7 +123,7 @@ public class OptionPanel extends JPanel {
 	 * @return a new instance of a {@link model.Player} object that corresponds
 	 * with the type of player selected.
 	 */
-	private static Player getPlayer(JComboBox<String> playerOpts, boolean player1) {
+	private static Player getPlayer(JComboBox<String> playerOpts,JComboBox<String> levelOpts, boolean player1) {
 		
 		Player player = new HumanPlayer();
 		if (playerOpts == null) {
@@ -120,11 +135,20 @@ public class OptionPanel extends JPanel {
 		if (type.equals("Computer")) {
 			player = new ComputerPlayer();
 		} else {
+			int level = (int) levelOpts.getSelectedItem();
 			if(type.equals("MinMaxComputer"))
-				player = new MinMaxPlayer(player1);
+				if (level >= 0 )
+				{
+					player = new MinMaxPlayer(player1,level);
+				}
+				else player = new MinMaxPlayer(player1,level);
 			else {
 				if(type.equals("AlphaBetaComputer"))
-					player = new AlphaBetaPlayer(player1);
+					if (level >= 0 )
+					{
+						player = new AlphaBetaPlayer(player1,level);
+					}
+					else player = new AlphaBetaPlayer(player1,level);
 			}
 		}
 		
@@ -164,7 +188,12 @@ public class OptionPanel extends JPanel {
 				btn = player2Btn;
 				isP1 = false;
 			}
-			
+			else if (src == gameDif) {
+				int level = gameDif.getSelectedIndex();
+				System.out.println("Yooooooo ");
+				System.out.println(gameDif.getSelectedIndex());
+			}
+
 		}
 	}
 }

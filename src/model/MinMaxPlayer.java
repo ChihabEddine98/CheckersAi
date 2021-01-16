@@ -29,6 +29,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 		this.transpositionTableMax = new StateSet();
 		this.transpositionTableMin = new StateSet();
 	}
+	public MinMaxPlayer(boolean joueur,int level) {
+		this.player = joueur;
+		this.transpositionTableMax = new StateSet();
+		this.transpositionTableMin = new StateSet();
+		this.level = level;
+	}
 	@Override
 	public boolean isHuman() {
 		return false;

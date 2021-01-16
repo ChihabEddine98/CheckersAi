@@ -279,7 +279,7 @@ public class CheckerBoard extends JButton {
 		// Draw a game over sign
 		if (isGameOver) {
 			g.setFont(new Font("Arial", Font.BOLD, 20));
-			msg = "Game Over!";
+			msg = "Game Over !";
 			width = g.getFontMetrics().stringWidth(msg);
 			g.setColor(new Color(240, 240, 255));
 			g.fillRoundRect(W / 2 - width / 2 - 5,
