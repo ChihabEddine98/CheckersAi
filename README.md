@@ -30,6 +30,6 @@ You can choose the level of the difficulty before starting the experience
 Here after one move for each Player : ( **Human** vs **MinMax** )
 ![2](https://user-images.githubusercontent.com/38104305/104843982-bdc0c800-58cd-11eb-919a-d905f03f843c.JPG)
 
-And Then if Game is Over ! ( **Human** vs **AlphaBeta** ) ( Winner is me :D )
+And Then if Game is Over ! ( **Human** vs **AlphaBeta** ) ( Winner is me :D ) The yellow pieces are **Kings**
 ![3](https://user-images.githubusercontent.com/38104305/104843980-bd283180-58cd-11eb-8bb5-596d458a5099.JPG)
 
