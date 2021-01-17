@@ -293,4 +293,8 @@ public class ComputerPlayer extends Player {
 		
 		return weight;
 	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
 }

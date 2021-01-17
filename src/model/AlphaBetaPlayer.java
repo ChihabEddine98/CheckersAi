@@ -19,6 +19,9 @@ public class AlphaBetaPlayer extends MinMaxPlayer {
 	public AlphaBetaPlayer(boolean joueur) {
 		super(joueur);
 	}
+	public AlphaBetaPlayer(boolean joueur,int level) {
+		super(joueur, level);
+	}
 	@Override
 	public boolean isHuman() {
 		return false;
@@ -31,8 +34,16 @@ public class AlphaBetaPlayer extends MinMaxPlayer {
 		if (game == null || game.isGameOver()) {
 			return;
 		}
-			
-		Move best_move=minimax_alpha_beta(game,20);
+		int depth ;
+		switch (level) {
+			case 1:
+				depth = 9; break;
+			case 2:
+				depth = 12; break;
+			default:
+				depth = 3; break;
+		}
+		Move best_move=minimax_alpha_beta(game,depth);
 		game.move(best_move);
 	}
 	private Move minimax_alpha_beta(Game game,int depth)
@@ -71,7 +82,6 @@ public class AlphaBetaPlayer extends MinMaxPlayer {
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
 			if (transpositionTableMax.getValue(game)!= null){
-				System.out.println(" Max :"+transpositionTableMax.getValue(game));
 				return transpositionTableMax.getValue(game);
 			}
 			return game.goodHeuristic(true);
@@ -107,7 +117,6 @@ public class AlphaBetaPlayer extends MinMaxPlayer {
 		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!= null)
 		{
 			if (transpositionTableMin.getValue(game)!= null){
-				System.out.println(" Min :"+transpositionTableMin.getValue(game));
 				return transpositionTableMin.getValue(game);
 			}
 			return game.goodHeuristic(false);

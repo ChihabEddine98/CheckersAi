@@ -50,14 +50,12 @@ public class MinMaxPlayer extends ComputerPlayer {
 
 		int depth ;
 		switch (level) {
-			case 0:
-				depth = 3; break;
 			case 1:
 				depth = 6; break;
 			case 2:
 				depth = 9; break;
 			default:
-				depth = 5; break;
+				depth = 3; break;
 		}
 		System.out.println("depth "+depth);
 		Move best_move=minimax(game,depth);
@@ -99,7 +97,6 @@ public class MinMaxPlayer extends ComputerPlayer {
 		if (game.isGameOver() || depth==0 || transpositionTableMax.getValue(game)!=null)
 		{
 			if (transpositionTableMax.getValue(game)!= null){
-				System.out.println(" Max :"+transpositionTableMax.getValue(game));
 				return transpositionTableMax.getValue(game);
 			}
 			return game.goodHeuristic(true);
@@ -133,7 +130,6 @@ public class MinMaxPlayer extends ComputerPlayer {
 		if (game.isGameOver() || depth==0 || transpositionTableMin.getValue(game)!= null)
 		{
 			if (transpositionTableMin.getValue(game)!= null){
-				System.out.println(" Min :"+transpositionTableMin.getValue(game));
 				return transpositionTableMin.getValue(game);
 			}
 			return game.goodHeuristic(false);

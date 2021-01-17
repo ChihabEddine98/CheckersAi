@@ -138,18 +138,10 @@ public class OptionPanel extends JPanel {
 			player = new ComputerPlayer();
 		} else {
 			if(type.equals("MinMaxComputer"))
-				if (level >= 0 )
-				{
-					player = new MinMaxPlayer(player1,level);
-				}
-				else player = new MinMaxPlayer(player1);
+				player = new MinMaxPlayer(player1,level);
 			else {
 				if(type.equals("AlphaBetaComputer"))
-					if (level >= 0 )
-					{
-						player = new AlphaBetaPlayer(player1);
-					}
-					else player = new AlphaBetaPlayer(player1);
+					player = new AlphaBetaPlayer(player1,level);
 			}
 		}
 		
@@ -177,7 +169,6 @@ public class OptionPanel extends JPanel {
 			boolean isNetwork = false, isP1 = true;
 			if (src == restartBtn) {
 				window.restart();
-				System.out.println(gameDif.getSelectedIndex());
 				OptionPanel.level = gameDif.getSelectedIndex();
 			} else if (src == player1Opts) {
 				Player player = getPlayer(player1Opts,OptionPanel.level,true);
@@ -185,8 +176,7 @@ public class OptionPanel extends JPanel {
 				isNetwork = (player instanceof NetworkPlayer);
 				btn = player1Btn;
 			} else if (src == player2Opts) {
-				int level = gameDif.getSelectedIndex();
-				Player player = getPlayer(player2Opts,level,false);
+				Player player = getPlayer(player2Opts,OptionPanel.level,false);
 				window.setPlayer2(player);
 				isNetwork = (player instanceof NetworkPlayer);
 				btn = player2Btn;
@@ -194,8 +184,13 @@ public class OptionPanel extends JPanel {
 			}
 			else if (src == gameDif) {
 				OptionPanel.level = gameDif.getSelectedIndex();
-//				System.out.println("Yooooooo ");
-//				System.out.println(gameDif.getSelectedIndex());
+				Player player1 = getPlayer(player1Opts,OptionPanel.level,true);
+				window.setPlayer1(player1);
+				Player player2 = getPlayer(player2Opts,OptionPanel.level,false);
+				window.setPlayer2(player2);
+				boolean doRestart = !(player1 instanceof HumanPlayer) || !(player2 instanceof HumanPlayer);
+				if( doRestart ) window.restart();
+
 			}
 
 		}
