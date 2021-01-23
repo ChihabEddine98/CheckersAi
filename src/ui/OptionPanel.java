@@ -66,6 +66,9 @@ public class OptionPanel extends JPanel {
 		
 		// Initialize the components
 		OptionListener ol = new OptionListener();
+		/* 
+		* Options Panel ( Game style , Difficulty )
+		*/
 		final String[] playerTypeOpts = {"Human", "Computer", "MinMaxComputer", "AlphaBetaComputer"/*, "Network"*/};
 		final String[] gameDifTypeOpts = {"Easy", "Medium", "Hard"};
 		this.restartBtn = new JButton("Restart");
