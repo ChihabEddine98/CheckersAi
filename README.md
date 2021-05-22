@@ -35,6 +35,7 @@ And Then if Game is Over ! ( **Human** vs **AlphaBeta** ) ( Winner is me :D ) Th
 ![3](https://user-images.githubusercontent.com/38104305/104843980-bd283180-58cd-11eb-8bb5-596d458a5099.JPG)
 
 ## TODO
-JavaFX
+1. JavaFX
+2. Dynamic Hashing for boards
 
 
