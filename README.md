@@ -1,6 +1,7 @@
 
 # Checkers-Ai
-- **By** Benamara Abdelkader Chihab Eddine 
+- **By** 
+- Benamara Abdelkader Chihab Eddine 
 - Djelid Aymen
 
 **CheckersAi** is a 2-players checkers Game where we can choose to play against a friend or an **Ai** which made us to implement **MiniMax** algorithms for adverserial 2-players games and we also implemented the **$\alpha-\beta$ Pruning** version for this algorithm.
