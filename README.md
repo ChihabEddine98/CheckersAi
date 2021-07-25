@@ -1,6 +1,6 @@
 
 # Checkers-Ai
-- **By** 
+**By** 
 - Benamara Abdelkader Chihab Eddine 
 - Djelid Aymen
 
