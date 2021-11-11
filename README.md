@@ -38,6 +38,6 @@ And Then if Game is Over ! ( **Human** vs **AlphaBeta** ) ( Winner is me :D ) Th
 
 ## TODO
 1. JavaFX
-2. Dynamic Hashing for boards
+2. Dynamic Hashing for boards (torch version)
 
 
