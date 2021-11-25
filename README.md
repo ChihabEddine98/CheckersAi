@@ -19,7 +19,7 @@ Or
 And Then we need to run this compiled classes by :
 > **java** Main
 
-# After running ! [Screentshots]
+# [Screentshots] After running  
 
 Just with making the run command you will have this window with some options :
 ![1](https://user-images.githubusercontent.com/38104305/104843983-be595e80-58cd-11eb-9dbc-0e7118fd30f4.JPG)
